@@ -148,7 +148,11 @@ if camera_type == 'picamera':
 
 	# If cat, dog, or teady bear is detected then call cat toy script
         if ((int(classes[0][0]) == 17) or (int(classes[0][0]) == 18) or (int(classes[0][0]) == 88)):
-            print('KITTY!!!!!!!')
+            print('Cat detected: highest confidence')
+            os.system('python cat_toy.py')
+
+        if((int(classes[0][1]) == 17) ot (int(classes[0][1]) == 18) or (int(classes[0][1]) == 88)):
+            print('Cat detected: lowest confidence')
             os.system('python cat_toy.py')
 
         # Draw the results of the detection (aka 'visulaize the results')
