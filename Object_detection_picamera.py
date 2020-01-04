@@ -17,6 +17,9 @@
 
 ## but I changed it to make it more understandable to me.
 
+# Drew Greenhawk edit: At line 150 I added an if statement to check if detected object is a cat, dog, or 
+# bear (doens't always detect the right thing). Then runs cat_toy.py script if correct obj is detected.
+
 
 # Import packages
 import os
