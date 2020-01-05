@@ -19,15 +19,29 @@ GPIO.setmode(GPIO.BOARD)
 
 def servo_setup(pin):
     print('Setting up servos...')
+
     #Set pin number to be output
     GPIO.setup(pin,GPIO.OUT)
+
     # Set output of pin to be 50Hz
     pwm = GPIO.PWM(pin,50)
 
     if pin == 7:
         servo_black(pwm)
+
     elif pin == 5:
         servo_blue(pwm)
+
+def laser():
+    print('Turning on laser')
+
+    GPIO.setup(11,GPIO.OUT)
+
+    tLaser = threading.currentThread()
+
+    while getattr(tLaser, "do_run", True):
+        GPIO.output(11,GPIO.HIGH)
+    GPIO.output(11,GPIO.LOW)
 
 # This function starts the black servo, then stops when do.run = False
 def servo_black(pwm):
@@ -40,11 +54,11 @@ def servo_black(pwm):
     try:
         while getattr(tBlack, "do_run", True):
             pwm.ChangeDutyCycle(7.5)
-            time.sleep(1.5)
-            pwm.ChangeDutyCycle(11.5)
-            time.sleep(1.5)
-            pwm.ChangeDutyCycle(2.5)
-            time.sleep(1.5)
+            time.sleep(1)
+            pwm.ChangeDutyCycle(9)
+            time.sleep(1)
+            pwm.ChangeDutyCycle(6)
+            time.sleep(1)
         print('Stopping black servo via do_run command')
     except KeyboardInterrupt:    #If CTRL+C is pressed, exit cleanly
         GPIO.cleanup()
@@ -61,9 +75,9 @@ def servo_blue(pwm):
         while getattr(tBlue, "do_run", True):
             pwm.ChangeDutyCycle(7.5)
             time.sleep(1)
-            pwm.ChangeDutyCycle(11.5)
+            pwm.ChangeDutyCycle(9)
             time.sleep(1)
-            pwm.ChangeDutyCycle(3)
+            pwm.ChangeDutyCycle(6)
             time.sleep(1)
         print('Stopping blue servo via do_run command')
     except KeyboardInterrupt:
@@ -76,18 +90,22 @@ def servo_blue(pwm):
 # Threads...(target fnction to execute, name of thread, args for target function)
 tBlack = threading.Thread(target = servo_setup, name = 'threadBlack', args = [7])
 tBlue = threading.Thread(target = servo_setup, name = 'threadBlue', args = [5])
+tLaser = threading.Thread(target = laser, name = 'laserThread')
 
 print('starting up threads...')
 
 # Start the threads
+tLaser.start()
 tBlack.start()
 tBlue.start()
 # Wait 10 seconds before stoppint threads
-time.sleep(10)
+time.sleep(25)
 tBlack.do_run = False
 tBlue.do_run = False
+tLaser.do_run = False
 # Im not entirely sure yet if I need these here or not
-tBlack.join()
-tBlue.join()
+#tBlack.join()
+#tBlue.join()
+#tLaser.join()
 
 

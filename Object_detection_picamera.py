@@ -151,7 +151,7 @@ if camera_type == 'picamera':
             print('Cat detected: highest confidence')
             os.system('python cat_toy.py')
 
-        if((int(classes[0][1]) == 17) ot (int(classes[0][1]) == 18) or (int(classes[0][1]) == 88)):
+        if((int(classes[0][1]) == 17) or (int(classes[0][1]) == 18) or (int(classes[0][1]) == 88)):
             print('Cat detected: lowest confidence')
             os.system('python cat_toy.py')
 
